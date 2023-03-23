@@ -11,5 +11,4 @@ mndot(file_path)
 }
 \description{
 Import directly minidot files concatenated with all its columns ready to use for any purpose
-The package includes minidots files for trial
 }
