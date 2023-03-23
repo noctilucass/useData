@@ -1,7 +1,6 @@
 #' Minidot import
 #' 
 #' Import directly minidot files concatenated with all its columns ready to use for any purpose
-#' The package includes minidots files for trial
 #' 
 #' @param file_path Characther path to the file
 #' @export
