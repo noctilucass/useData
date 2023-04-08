@@ -4,7 +4,7 @@
 #' 
 #' @param file_chose Interactively chose the file that you need to import, if FALSE write the path
 #' @export
-mndot<-function(file_choose, path){
+mndot<-function(file_choose=F, path=T){
   if(file_choose==TRUE) {dat<-read.csv(file.choose(),skip = 6)}
   if(file_choose==FALSE) {dat<-read.csv(path,skip = 6)}
   dat<-dat[-1,2:7]
@@ -25,7 +25,7 @@ mndot<-function(file_choose, path){
 #' 
 #' @param file_chose Interactively chose the file that you need to import, if FALSE write the path
 #' @export
-hbo<-function(file_choose, path){
+hbo<-function(file_choose=F, path=T){
   if(file_choose==TRUE) hobo <- readxl::read_excel(file.choose())
   if(file_choose==FALSE) hobo <- readxl::read_excel(path)
   HoraChile<-lubridate::as_datetime(hobo$`Fecha/hora (Chile Daylight Time)`)
@@ -35,3 +35,4 @@ hbo<-function(file_choose, path){
   Temperature<-as.numeric(hobo$Temperature)
   data.frame(HoraChile, Temperature, pH, Minivoltios)
 }
+
