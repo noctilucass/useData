@@ -4,7 +4,7 @@
 \alias{hbo}
 \title{HOBO import}
 \usage{
-hbo(file_choose, path)
+hbo(file_choose = F, path)
 }
 \arguments{
 \item{file_chose}{Interactively chose the file that you need to import, if FALSE write the path}

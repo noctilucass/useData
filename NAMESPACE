@@ -2,3 +2,4 @@
 
 export(hbo)
 export(mndot)
+export(plot_ox)

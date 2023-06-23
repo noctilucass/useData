@@ -4,7 +4,7 @@
 \alias{mndot}
 \title{Minidot import}
 \usage{
-mndot(file_choose, path)
+mndot(file_choose = F, path)
 }
 \arguments{
 \item{file_chose}{Interactively chose the file that you need to import, if FALSE write the path}
