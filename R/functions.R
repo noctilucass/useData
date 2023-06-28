@@ -46,7 +46,8 @@ hbo<-function(file_choose=F, path){
 plot_ox<-function(path){
   library(ggplot2)
   library(dplyr)
-  x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE)
+  library(tidyr)
+  x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
   a<-function(path){
     dat<-read.csv(path,skip = 6)
     dat<-dat[-1,2:7]
@@ -66,3 +67,4 @@ plot_ox<-function(path){
   df <- do.call(rbind, b)  # bind them all together
   print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()+facet_grid(~df_name))
 }
+
