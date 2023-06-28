@@ -1,4 +1,4 @@
-#' Minidot import
+#' Minidot function
 #' 
 #' Import directly minidot files concatenated with all its columns ready to use for any purpose
 #' 
@@ -19,7 +19,7 @@ mndot<-function(file_choose=F, path){
   data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
 }
 
-#' HOBO import
+#' HOBO function
 #' 
 #' Import directly HOBO files with all its columns ready to use for any purpose
 #' 
@@ -36,17 +36,15 @@ hbo<-function(file_choose=F, path){
   data.frame(HoraChile, Temperature, pH, Minivoltios)
 }
 
-#' plot_ox
+#' plot_ox function
 #'
 #' Directly plot multiple minidot files that are in the same folder
 #'
 #' @param path write the path of the folder where the files are
 #' @export
-#' @example plot_ox("/Users/lucasb/R_package/data")
 plot_ox<-function(path){
-  library(ggplot2)
-  library(dplyr)
-  library(tidyr)
+  require(ggplot2)
+  require(dplyr)
   x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
   a<-function(path){
     dat<-read.csv(path,skip = 6)

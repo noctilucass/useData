@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{plot_ox}
 \alias{plot_ox}
-\title{plot_ox}
+\title{plot_ox function}
 \usage{
 plot_ox(path)
 }

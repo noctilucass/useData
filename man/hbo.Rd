@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{hbo}
 \alias{hbo}
-\title{HOBO import}
+\title{HOBO function}
 \usage{
 hbo(file_choose = F, path)
 }

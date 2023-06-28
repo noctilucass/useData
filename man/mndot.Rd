@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{mndot}
 \alias{mndot}
-\title{Minidot import}
+\title{Minidot function}
 \usage{
 mndot(file_choose = F, path)
 }
