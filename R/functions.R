@@ -66,3 +66,41 @@ plot_ox<-function(path){
   print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()+facet_grid(~df_name))
 }
 
+#' Read_mndot function
+#'
+#' Import and concatenate
+#'
+#' @param path write the path of the folder where the files are
+#' @export
+Read_mndot<-function(path){
+file_list <- list.files(path, full.names = T)
+DATA<-matrix(data=NA,nrow=0,ncol=10)
+
+for (i in 1:length(file_list)){
+  
+  a<-read.delim(file_list[i],skip="2", sep = ",", dec = ".")
+  
+  DATE<-matrix(data=NA, nrow=nrow(a),ncol=6)
+  
+  for (j in 1:nrow(a)){
+    
+    date<-as.POSIXlt(a[j,1],origin="1970-01-01")
+    
+    DATE[j,1]<-as.numeric(format(date,format="%Y"))
+    DATE[j,2]<-as.numeric(format(date,format="%m"))
+    DATE[j,3]<-as.numeric(format(date,format="%d"))
+    DATE[j,4]<-as.numeric(format(date,format="%H"))
+    DATE[j,5]<-as.numeric(format(date,format="%M"))
+    DATE[j,6]<-as.numeric(format(date,format="%S"))
+    
+  }
+  
+data<-cbind(DATE,a[2:5])
+colnames(DATA)<-colnames(data)
+DATA<-rbind(DATA,data)
+colnames(DATA)<-c("year","mes","dia","hora","minuto","segundo","Volts","TempC","DOmg/l","Battery")
+}
+assign("DATA", DATA, envir = .GlobalEnv)
+}
+
+
