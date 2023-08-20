@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{plot_ox}
 \alias{plot_ox}
-\title{plot_ox function}
+\title{HOBO function}
 \usage{
 plot_ox(path)
 }
@@ -10,5 +10,12 @@ plot_ox(path)
 \item{path}{write the path of the folder where the files are}
 }
 \description{
+Import directly HOBO files with all its columns ready to use for any purpose
+}
+\details{
+param file_chose Interactively chose the file that you need to import, if FALSE write the path
+export
+plot_ox function
+
 Directly plot multiple minidot files that are in the same folder
 }

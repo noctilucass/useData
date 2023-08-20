@@ -19,22 +19,22 @@ mndot<-function(file_choose=F, path){
   data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
 }
 
-#' HOBO function
+##' HOBO function
 #' 
 #' Import directly HOBO files with all its columns ready to use for any purpose
 #' 
-#' @param file_chose Interactively chose the file that you need to import, if FALSE write the path
-#' @export
-hbo<-function(file_choose=F, path){
-  if(file_choose==TRUE) hobo <- readxl::read_excel(file.choose())
-  if(file_choose==FALSE) hobo <- readxl::read_excel(path)
-  HoraChile<-lubridate::as_datetime(hobo$`Fecha/hora (Chile Daylight Time)`)
-  pH<-as.numeric(hobo$`Ch: 3 - pH   (pH)`)
-  Minivoltios<-as.numeric(hobo$`Ch: 2 - Milivoltios   (mv)`)
-  colnames(hobo)<-c("1","HoraChile","Temperature","pH","Minivoltios")
-  Temperature<-as.numeric(hobo$Temperature)
-  data.frame(HoraChile, Temperature, pH, Minivoltios)
-}
+#' param file_chose Interactively chose the file that you need to import, if FALSE write the path
+#' export
+#hbo<-function(file_choose=F, path){
+#  if(file_choose==TRUE) hobo <- readxl::read_excel(file.choose())
+#  if(file_choose==FALSE) hobo <- readxl::read_excel(path)
+#  HoraChile<-lubridate::as_datetime(hobo$`Fecha/hora (Chile Daylight Time)`)
+#  pH<-as.numeric(hobo$`Ch: 3 - pH   (pH)`)
+#  Minivoltios<-as.numeric(hobo$`Ch: 2 - Milivoltios   (mv)`)
+#  colnames(hobo)<-c("1","HoraChile","Temperature","pH","Minivoltios")
+#  Temperature<-as.numeric(hobo$Temperature)
+#  data.frame(HoraChile, Temperature, pH, Minivoltios)
+#}
 
 #' plot_ox function
 #'
