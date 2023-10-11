@@ -103,4 +103,34 @@ colnames(DATA)<-c("year","mes","dia","hora","minuto","segundo","Volts","TempC","
 assign("DATA", DATA, envir = .GlobalEnv)
 }
 
+#' plot_temp function
+#'
+#' Directly plot multiple minidot files that are in the same folder
+#'
+#' @param path write the path of the folder where the files are
+#' @export
+plot_temp<-function(path){
+  require(ggplot2)
+  require(dplyr)
+  x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
+  a<-function(path){
+    dat<-read.csv(path,skip = 6)
+    dat<-dat[-1,2:7]
+    UTC<-format(as.POSIXct(dat$UTC_Date_._Time), format = "%y-%m-%d %H:%M")
+    UTC<-lubridate::as_datetime(UTC, format = "%y-%m-%d %H:%M")
+    HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
+    HoraChile<-lubridate::as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
+    Battery<-as.numeric(dat$Battery)
+    Temperature<-as.numeric(dat$Temperature)
+    DissolvedOxygen<-as.numeric(dat$Dissolved.Oxygen)
+    SaturationOxygen<-as.numeric(dat$Dissolved.Oxygen.Saturation)
+    data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)}
+  b=lapply(x,a)
+  names(b) = basename(x) # give them the file name
+  for(i in seq_along(b))
+    b[[i]]$df_name = names(b)[i]
+  df <- do.call(rbind, b)  # bind them all together
+  print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()+facet_grid(~df_name))
+}
+
 
