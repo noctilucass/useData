@@ -1,4 +1,4 @@
-#' Minidot function
+#' mndot function
 #' 
 #' Import directly minidot files concatenated with all its columns ready to use for any purpose
 #' 
@@ -19,7 +19,7 @@ mndot<-function(file_choose=F, path){
   data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
 }
 
-#' HOBO function
+#' hbo function
 #' 
 #' Import directly HOBO files with all its columns ready to use for any purpose
 #' 
@@ -41,8 +41,10 @@ hbo<-function(file_choose=F, path){
 #' Directly plot multiple minidot files that are in the same folder
 #'
 #' @param path write the path of the folder where the files are
+#' @param interactive logic, TRUE or FALSE to make interactive ggplot
+#' @param facet logic, TRUE or FALSE to make facet ggplot
 #' @export
-plot_ox<-function(path){
+plot_ox<-function(path, interactive, facet){
   require(ggplot2)
   require(dplyr)
   x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
@@ -63,7 +65,12 @@ plot_ox<-function(path){
   for(i in seq_along(b))
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
-  print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()+facet_grid(~df_name))
+  if(interactive==TRUE)   
+    if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name)))
+    if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()))
+  if(interactive==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()+facet_grid(~df_name))
+    if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name))
+    if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point())
 }
 
 #' Read_mndot function
@@ -108,8 +115,10 @@ assign("DATA", DATA, envir = .GlobalEnv)
 #' Directly plot multiple minidot files that are in the same folder
 #'
 #' @param path write the path of the folder where the files are
+#' @param interactive logic, TRUE or FALSE to make interactive ggplot
+#' @param facet logic, TRUE or FALSE to make facet ggplot
 #' @export
-plot_temp<-function(path){
+plot_temp<-function(path, interactive, facet){
   require(ggplot2)
   require(dplyr)
   x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
@@ -130,7 +139,12 @@ plot_temp<-function(path){
   for(i in seq_along(b))
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
-  print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()+facet_grid(~df_name))
-}
+  if(interactive==TRUE)   
+    if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name)))
+    if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()))
+  if(interactive==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()+facet_grid(~df_name))
+    if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name))
+    if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point())
+  }
 
 

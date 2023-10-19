@@ -4,10 +4,14 @@
 \alias{plot_ox}
 \title{plot_ox function}
 \usage{
-plot_ox(path)
+plot_ox(path, interactive, facet)
 }
 \arguments{
 \item{path}{write the path of the folder where the files are}
+
+\item{interactive}{logic, TRUE or FALSE to make interactive ggplot}
+
+\item{facet}{logic, TRUE or FALSE to make facet ggplot}
 }
 \description{
 Directly plot multiple minidot files that are in the same folder
