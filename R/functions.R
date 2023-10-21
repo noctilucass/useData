@@ -52,8 +52,7 @@ plot_ox<-function(path, interactive, facet){
   a<-function(path){
     dat<-read.csv(path,skip = 6)
     dat<-dat[-1,2:7]
-    UTC<-format(as.POSIXct(dat$UTC_Date_._Time), format = "%y-%m-%d %H:%M")
-    UTC<-lubridate::as_datetime(UTC, format = "%y-%m-%d %H:%M")
+    UTC<-lubridate::ymd_hms(dat$UTC_Date_._Time)
     HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
     HoraChile<-lubridate::as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
     Battery<-as.numeric(dat$Battery)
@@ -67,11 +66,11 @@ plot_ox<-function(path, interactive, facet){
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
   if(interactive==TRUE)   
-    if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name)))
-    if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()))
-  if(interactive==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()+facet_grid(~df_name))
-    if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name))
-    if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point())
+    if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point() + facet_grid(~df_name)))
+    if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()))
+  if(interactive==FALSE) 
+    if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point() + facet_grid(~df_name))
+    if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point())
 }
 
 #' Read_mndot function
@@ -127,8 +126,7 @@ plot_temp<-function(path, interactive, facet){
   a<-function(path){
     dat<-read.csv(path,skip = 6)
     dat<-dat[-1,2:7]
-    UTC<-format(as.POSIXct(dat$UTC_Date_._Time), format = "%y-%m-%d %H:%M")
-    UTC<-lubridate::as_datetime(UTC, format = "%y-%m-%d %H:%M")
+    UTC<-lubridate::ymd_hms(dat$UTC_Date_._Time)
     HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
     HoraChile<-lubridate::as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
     Battery<-as.numeric(dat$Battery)
@@ -144,7 +142,7 @@ plot_temp<-function(path, interactive, facet){
   if(interactive==TRUE)   
     if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name)))
     if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()))
-  if(interactive==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()+facet_grid(~df_name))
+  if(interactive==FALSE) 
     if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name))
     if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point())
   }
