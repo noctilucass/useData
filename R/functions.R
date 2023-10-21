@@ -46,6 +46,7 @@ hbo<-function(file_choose=F, path){
 #' @export
 plot_ox<-function(path, interactive, facet){
   require(ggplot2)
+  require(plotly)
   require(dplyr)
   x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
   a<-function(path){
@@ -120,6 +121,7 @@ assign("DATA", DATA, envir = .GlobalEnv)
 #' @export
 plot_temp<-function(path, interactive, facet){
   require(ggplot2)
+  require(plotly)
   require(dplyr)
   x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
   a<-function(path){
