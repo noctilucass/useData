@@ -48,30 +48,35 @@ plot_ox<-function(path, interactive, facet){
   require(ggplot2)
   require(plotly)
   require(dplyr)
-  x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
+  require(lubridate)
+  x=list.files(path, pattern = c(".TXT",".txt",".csv",".CSV"), recursive = TRUE, full.names = T)
   a<-function(path){
     dat<-read.csv(path,skip = 6)
     dat<-dat[-1,2:7]
-    UTC<-lubridate::ymd_hms(dat$UTC_Date_._Time)
+    UTC<-ymd_hms(dat$UTC_Date_._Time)
     HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
-    HoraChile<-lubridate::as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
+    HoraChile<-as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
     Battery<-as.numeric(dat$Battery)
     Temperature<-as.numeric(dat$Temperature)
     DissolvedOxygen<-as.numeric(dat$Dissolved.Oxygen)
     SaturationOxygen<-as.numeric(dat$Dissolved.Oxygen.Saturation)
-    data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)}
+    data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
+    }
    b=lapply(x,a)
   names(b) = basename(x) # give them the file name
   for(i in seq_along(b))
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
-  if(interactive==TRUE)   
-    if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point() + facet_grid(~df_name)))
-    if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()))
-  if(interactive==FALSE) 
-    if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point() + facet_grid(~df_name))
-    if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point())
-}
+  p<-ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()
+  print(p)
+  if (interactive==TRUE && facet==FALSE) {
+    ggplotly(p)
+  } else if (interactive==FALSE && facet==TRUE){
+    print(p + facet_grid(~df_name))
+  } else if (interactive==TRUE && facet==TRUE){
+    ggplotly(p + facet_grid(~df_name))
+  }
+  }
 
 #' Read_mndot function
 #'
@@ -139,12 +144,15 @@ plot_temp<-function(path, interactive, facet){
   for(i in seq_along(b))
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
-  if(interactive==TRUE)   
-    if(facet==TRUE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name)))
-    if(facet==FALSE) print(ggplotly(ggplot(data = df,aes(HoraChile, Temperature))+geom_point()))
-  if(interactive==FALSE) 
-    if(facet==TRUE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point() + facet_grid(~df_name))
-    if(facet==FALSE) print(ggplot(data = df,aes(HoraChile, Temperature))+geom_point())
+  p<-ggplot(data = df,aes(HoraChile, Temperature))+geom_point()
+  print(p)
+  if (interactive==TRUE && facet==FALSE) {
+    ggplotly(p)
+  } else if (interactive==FALSE && facet==TRUE){
+    print(p + facet_grid(~df_name))
+  } else if (interactive==TRUE && facet==TRUE){
+    ggplotly(p + facet_grid(~df_name))
   }
+}
 
 
