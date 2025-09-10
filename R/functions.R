@@ -2,21 +2,22 @@
 #' 
 #' Import directly minidot files concatenated with all its columns ready to use for any purpose
 #' 
-#' @param file_chose Interactively chose the file that you need to import, if FALSE write the path
+#' @param file_chose Interactively chose the file that you need to import, if FALSE write the path. Default TRUE
 #' @export
-mndot<-function(file_choose=F, path){
+mndot<-function(file_choose=T, path){
   if(file_choose==TRUE) {dat<-read.csv(file.choose(),skip = 6)}
   if(file_choose==FALSE) {dat<-read.csv(path,skip = 6)}
-  dat<-dat[-1,2:7]
-  UTC<-format(as.POSIXct(dat$UTC_Date_._Time), format = "%y-%m-%d %H:%M")
+  dat<-dat[-1,]
+  UTC<-format(as.POSIXct(dat[,2]), format = "%y-%m-%d %H:%M")
   UTC<-lubridate::as_datetime(UTC, format = "%y-%m-%d %H:%M")
-  HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
-  HoraChile<-lubridate::as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
+  DatetimeZone<-format(as.POSIXct(dat[,3]), format = "%y-%m-%d %H:%M")
+  DatetimeZone<-lubridate::as_datetime(DatetimeZone, format = "%y-%m-%d %H:%M")
   Battery<-as.numeric(dat$Battery)
   Temperature<-as.numeric(dat$Temperature)
   DissolvedOxygen<-as.numeric(dat$Dissolved.Oxygen)
   SaturationOxygen<-as.numeric(dat$Dissolved.Oxygen.Saturation)
-  data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
+  MeasureQuality <- as.numeric(dat$q)
+  data.frame(UTC,DatetimeZone,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
 }
 
 #' hbo function
@@ -41,10 +42,10 @@ hbo<-function(file_choose=F, path){
 #' Directly plot multiple minidot files that are in the same folder
 #'
 #' @param path write the path of the folder where the files are
-#' @param interactive logic, TRUE or FALSE to make interactive ggplot
-#' @param facet logic, TRUE or FALSE to make facet ggplot
+#' @param interactive logic, TRUE or FALSE to make interactive ggplot. Default FALSE
+#' @param facet logic, TRUE or FALSE to make facet ggplot. Default FALSE
 #' @export
-plot_ox<-function(path, interactive, facet){
+plot_ox<-function(path, interactive=F, facet=F){
   require(ggplot2)
   require(plotly)
   require(dplyr)
@@ -52,22 +53,24 @@ plot_ox<-function(path, interactive, facet){
   x=list.files(path, pattern = c(".TXT",".txt",".csv",".CSV"), recursive = TRUE, full.names = T)
   a<-function(path){
     dat<-read.csv(path,skip = 6)
-    dat<-dat[-1,2:7]
-    UTC<-ymd_hms(dat$UTC_Date_._Time)
-    HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
-    HoraChile<-as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
+    dat<-dat[-1,]
+    UTC<-format(as.POSIXct(dat[,2]), format = "%y-%m-%d %H:%M")
+    UTC<-lubridate::as_datetime(UTC, format = "%y-%m-%d %H:%M")
+    DatetimeZone<-format(as.POSIXct(dat[,3]), format = "%y-%m-%d %H:%M")
+    DatetimeZone<-lubridate::as_datetime(DatetimeZone, format = "%y-%m-%d %H:%M")
     Battery<-as.numeric(dat$Battery)
     Temperature<-as.numeric(dat$Temperature)
     DissolvedOxygen<-as.numeric(dat$Dissolved.Oxygen)
     SaturationOxygen<-as.numeric(dat$Dissolved.Oxygen.Saturation)
-    data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
+    MeasureQuality <- as.numeric(dat$q)
+    data.frame(UTC,DatetimeZone,Battery,Temperature,DissolvedOxygen,SaturationOxygen)
     }
    b=lapply(x,a)
   names(b) = basename(x) # give them the file name
   for(i in seq_along(b))
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
-  p<-ggplot(data = df,aes(HoraChile, SaturationOxygen))+geom_point()
+  p<-ggplot(data = df,aes(DatetimeZone, SaturationOxygen))+geom_point()
   print(p)
   if (interactive==TRUE && facet==FALSE) {
     ggplotly(p)
@@ -130,21 +133,23 @@ plot_temp<-function(path, interactive, facet){
   x=list.files(path,pattern = c(".TXT",".txt",".csv",".CSV"),recursive = TRUE, full.names = T)
   a<-function(path){
     dat<-read.csv(path,skip = 6)
-    dat<-dat[-1,2:7]
-    UTC<-lubridate::ymd_hms(dat$UTC_Date_._Time)
-    HoraChile<-format(as.POSIXct(dat$Hora.de.Chile), format = "%y-%m-%d %H:%M")
-    HoraChile<-lubridate::as_datetime(HoraChile, format = "%y-%m-%d %H:%M")
+    dat<-dat[-1,]
+    UTC<-format(as.POSIXct(dat[,2]), format = "%y-%m-%d %H:%M")
+    UTC<-lubridate::as_datetime(UTC, format = "%y-%m-%d %H:%M")
+    DatetimeZone<-format(as.POSIXct(dat[,3]), format = "%y-%m-%d %H:%M")
+    DatetimeZone<-lubridate::as_datetime(DatetimeZone, format = "%y-%m-%d %H:%M")
     Battery<-as.numeric(dat$Battery)
     Temperature<-as.numeric(dat$Temperature)
     DissolvedOxygen<-as.numeric(dat$Dissolved.Oxygen)
     SaturationOxygen<-as.numeric(dat$Dissolved.Oxygen.Saturation)
-    data.frame(UTC,HoraChile,Battery,Temperature,DissolvedOxygen,SaturationOxygen)}
+    MeasureQuality <- as.numeric(dat$q)
+    data.frame(UTC,DatetimeZone,Battery,Temperature,DissolvedOxygen,SaturationOxygen)}
   b=lapply(x,a)
   names(b) = basename(x) # give them the file name
   for(i in seq_along(b))
     b[[i]]$df_name = names(b)[i]
   df <- do.call(rbind, b)  # bind them all together
-  p<-ggplot(data = df,aes(HoraChile, Temperature))+geom_point()
+  p<-ggplot(data = df,aes(DatetimeZone, Temperature))+geom_point()
   print(p)
   if (interactive==TRUE && facet==FALSE) {
     ggplotly(p)
