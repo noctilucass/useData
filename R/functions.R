@@ -45,7 +45,7 @@ hbo<-function(file_choose=F, path){
 #' @param interactive logic, TRUE or FALSE to make interactive ggplot. Default FALSE
 #' @param facet logic, TRUE or FALSE to make facet ggplot. Default FALSE
 #' @export
-plot_ox<-function(path, interactive=F, facet=F){
+plot_ox<-function(path, interactive=F, facet=T){
   require(ggplot2)
   require(plotly)
   require(dplyr)
@@ -126,7 +126,7 @@ assign("DATA", DATA, envir = .GlobalEnv)
 #' @param interactive logic, TRUE or FALSE to make interactive ggplot
 #' @param facet logic, TRUE or FALSE to make facet ggplot
 #' @export
-plot_temp<-function(path, interactive, facet){
+plot_temp<-function(path, interactive=F, facet=T){
   require(ggplot2)
   require(plotly)
   require(dplyr)
